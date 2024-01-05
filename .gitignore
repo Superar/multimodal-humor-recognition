@@ -3,6 +3,7 @@ dependency_links.txt
 PKG-INFO
 SOURCES.txt
 top_level.txt
+build/
 
 results/models/
 data/
