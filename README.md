@@ -1,6 +1,6 @@
 # Exploring Multimodal Models for Humor Recognition in Portuguese
 
-This repository contains the experiments and results for the paper "Exploring Multimodal Models for Humor Recognition in Portuguese" accepted the [16th International Conference on Computational Processing of Portuguese (PROPOR 2024)](https://propor2024.citius.gal/).
+This repository contains the experiments and results for the paper "Exploring Multimodal Models for Humor Recognition in Portuguese" accepted to the [16th International Conference on Computational Processing of Portuguese (PROPOR 2024)](https://propor2024.citius.gal/).
 
 The main focus of this paper is to explore multimodal approaches in Humor Recognition by combining textual and explicit features. According to the architecture shown below.
 
@@ -48,7 +48,7 @@ multimodal-humor-recognition
 
 ## How to cite
 ```bibtex
-@inproceedings{InacioCaseli2020,
+@inproceedings{InacioGoncaloOliveira2024,
   title = {Word {{Embeddings}} at {{Post-Editing}}},
   booktitle = {Proceedings of the 16th International Conference on Computational {{Processing}} of the {{Portuguese Language}}},
   author = {In{\'a}cio, Marcio Lima and Gon{\c c}alo Oliveira, Hugo},
