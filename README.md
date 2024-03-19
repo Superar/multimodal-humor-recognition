@@ -18,6 +18,10 @@ flowchart BT
     combination-->classification;
 ```
 
+## Corpus - Puntuguese
+
+The corpus is available on [GitHub](https://github.com/Superar/Puntuguese).
+
 ## How to run
 
 This project is available as a python module to make installation and re-use easier.
@@ -49,11 +53,17 @@ multimodal-humor-recognition
 ## How to cite
 ```bibtex
 @inproceedings{InacioGoncaloOliveira2024,
-  title = {Word {{Embeddings}} at {{Post-Editing}}},
-  booktitle = {Proceedings of the 16th International Conference on Computational {{Processing}} of the {{Portuguese Language}}},
-  author = {In{\'a}cio, Marcio Lima and Gon{\c c}alo Oliveira, Hugo},
+  title = {Exploring Multimodal Models for Humor Recognition in {{Portuguese}}},
+  booktitle = {Proceedings of the 16th International Conference on Computational Processing of Portuguese},
+  author = {In{\'a}cio, Marcio and Gon{\c c}alo Oliveira, Hugo},
+  editor = {Gamallo, Pablo and Claro, Daniela and Teixeira, Ant{\'o}nio and Real, Livy and Garcia, Marcos and Oliveira, Hugo Gon{\c c}alo and Amaro, Raquel},
   year = {2024},
-  note = {Accepted paper to be published}
+  month = mar,
+  pages = {568--574},
+  publisher = {Association for Computational Lingustics},
+  address = {Santiago de Compostela, Galicia/Spain},
+  url = {https://aclanthology.org/2024.propor-1.62},
+  copyright = {All rights reserved}
 }
 ```
 
