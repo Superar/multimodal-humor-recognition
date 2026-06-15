@@ -26,15 +26,15 @@ The corpus is available on [GitHub](https://github.com/Superar/Puntuguese).
 
 This project is available as a python module to make installation and re-use easier.
 
-Using Pipenv, just run:
+Using uv, just run:
 
-```
-pipenv install
+```bash
+uv sync
 ```
 
 If you prefer to use pip, run:
 
-```
+```bash
 pip install -r requirements.txt
 pip install .
 ```
