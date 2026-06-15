@@ -3,7 +3,7 @@ name = "humor-recognition"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.13"
 dependencies = [
     "datasets",
     "ipykernel",
@@ -13,11 +13,13 @@ dependencies = [
     "scikit-learn",
     "setuptools",
     "tables",
-    "torch",
-    "torchaudio",
-    "torchvision",
+    "torch>=2.6.0",
+    "torchaudio>=2.6.0",
+    "torchvision>=0.21.0",
     "tqdm",
     "transformers[torch]",
+    "marimo",
+    "wandb",
 ]
 
 [build-system]
@@ -36,5 +38,5 @@ torchvision = { index = "pytorch" }
 
 [[tool.uv.index]]
 name = "pytorch"
-url = "https://download.pytorch.org/whl/cu121"
+url = "https://download.pytorch.org/whl/cu124"
 explicit = true

@@ -9,3 +9,5 @@ results/models/
 results/shap_values.pt
 data/
 **/.ipynb_checkpoints/
+**/__marimo__/
+wandb/
