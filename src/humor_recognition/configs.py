@@ -1,4 +1,4 @@
-from transformers import PretrainedConfig
+from transformers import PretrainedConfig, AutoConfig
 
 
 class GeneralConfig(PretrainedConfig):
@@ -11,7 +11,11 @@ class GeneralConfig(PretrainedConfig):
                  **kwargs):
         self.base_model = base_model
         self.base_model_type = base_model_type
-        self.text_dim = 768 if base_model_type == 'bert' else 1536
+        try:
+            base_config = AutoConfig.from_pretrained(base_model)
+            self.text_dim = base_config.hidden_size
+        except Exception:
+            self.text_dim = 768 if base_model_type == 'bert' else 1536
         self.num_labels = num_labels
         self.num_features = num_features
         self.freeze_base = freeze_base
