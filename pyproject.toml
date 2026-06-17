@@ -20,6 +20,7 @@ dependencies = [
     "transformers[torch]",
     "marimo",
     "wandb",
+    "altair>=6.2.1",
 ]
 
 [build-system]
