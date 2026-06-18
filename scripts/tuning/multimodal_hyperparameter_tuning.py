@@ -56,14 +56,14 @@ ENTITY = "limma_"
 def get_sweep_config(base_model, method_name):
     model_name = base_model.split("/")[-1]
     return {
-        "name": f"{model_name}-{method_name}",
+        "name": f"{model_name} + {method_name}",
         "method": "bayes",
         "metric": {"name": "eval/f1_macro", "goal": "maximize"},
         "early_terminate": {"type": "hyperband", "min_iter": 2, "eta": 2},
         "parameters": {
             "learning_rate": {
                 "distribution": "log_uniform_values",
-                "min": 1e-5,
+                "min": 1e-6,
                 "max": 1e-3,
             },
             "batch_size": {"values": [8, 16, 32]},
