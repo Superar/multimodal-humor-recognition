@@ -3,7 +3,7 @@ import torch
 from .configs import *
 
 from torch import nn
-from transformers import BertModel, DebertaModel, PreTrainedModel
+from transformers import BertModel, DebertaV2Model, PreTrainedModel
 from transformers.modeling_outputs import SequenceClassifierOutput
 
 
@@ -17,7 +17,7 @@ class ClassificationModelConcatenation(PreTrainedModel):
         if config.base_model_type == 'bert':
             self.transformer = BertModel.from_pretrained(config.base_model)
         elif config.base_model_type == 'deberta':
-            self.transformer = DebertaModel.from_pretrained(config.base_model)
+            self.transformer = DebertaV2Model.from_pretrained(config.base_model)
         else:
             raise ValueError("No valid base model type. " +
                              "Expected 'bert' or 'deberta', " +
@@ -36,12 +36,13 @@ class ClassificationModelConcatenation(PreTrainedModel):
         seq_output = self.transformer(input_ids=input_ids,
                                       attention_mask=attention_mask,
                                       **kwargs)
+        hidden_state = seq_output.last_hidden_state[:, 0]
         text_pooler_output = self.text_pooler_fn(
             self.text_pooler(
-                seq_output.last_hidden_state[:, 0]
+                hidden_state.to(self.text_pooler.weight.dtype)
             )
         )
-        concat_repr = torch.cat((text_pooler_output, features.float()),
+        concat_repr = torch.cat((text_pooler_output, features.to(text_pooler_output.dtype)),
                                 dim=1)
         dropout_output = self.dropout(concat_repr)
         logits = self.linear(dropout_output)
@@ -71,17 +72,18 @@ class ClassificationModelFeaturesPooling(ClassificationModelConcatenation):
         seq_output = self.transformer(input_ids=input_ids,
                                       attention_mask=attention_mask,
                                       **kwargs)
+        hidden_state = seq_output.last_hidden_state[:, 0]
         text_pooler_output = self.text_pooler_fn(
             self.text_pooler(
-                seq_output.last_hidden_state[:, 0]
+                hidden_state.to(self.text_pooler.weight.dtype)
             )
         )
         features_pooler_output = self.features_pooler_fn(
             self.features_pooler(
-                features.float()
+                features.to(self.features_pooler.weight.dtype)
             )
         )
-        concat_repr = torch.cat((text_pooler_output, features_pooler_output),
+        concat_repr = torch.cat((text_pooler_output, features_pooler_output.to(text_pooler_output.dtype)),
                                 dim=1)
         dropout_output = self.dropout(concat_repr)
         logits = self.linear(dropout_output)
@@ -112,17 +114,18 @@ class ClassificationModelSharedRepresentation(ClassificationModelFeaturesPooling
         seq_output = self.transformer(input_ids=input_ids,
                                       attention_mask=attention_mask,
                                       **kwargs)
+        hidden_state = seq_output.last_hidden_state[:, 0]
         text_pooler_output = self.text_pooler_fn(
             self.text_pooler(
-                seq_output.last_hidden_state[:, 0]
+                hidden_state.to(self.text_pooler.weight.dtype)
             )
         )
         features_pooler_output = self.features_pooler_fn(
             self.features_pooler(
-                features.float()
+                features.to(self.features_pooler.weight.dtype)
             )
         )
-        concat_repr = torch.cat((text_pooler_output, features_pooler_output),
+        concat_repr = torch.cat((text_pooler_output, features_pooler_output.to(text_pooler_output.dtype)),
                                 dim=1)
         shared_repr_output = self.shared_repr_fn(
             self.shared_repr(
