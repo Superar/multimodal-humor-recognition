@@ -21,6 +21,9 @@ dependencies = [
     "marimo",
     "wandb",
     "altair>=6.2.1",
+    "vegafusion>=2.0.3",
+    "vl-convert-python>=1.9.0",
+    "nbformat>=5.10.4",
 ]
 
 [build-system]
