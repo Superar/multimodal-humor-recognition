@@ -7,6 +7,55 @@ from transformers import BertModel, DebertaV2Model, PreTrainedModel
 from transformers.modeling_outputs import SequenceClassifierOutput
 
 
+class ClassificationModelBase(PreTrainedModel):
+    config_class = GeneralConfig
+
+    def __init__(self, config):
+        super().__init__(config)
+        self.config = config
+
+        if config.base_model_type == 'bert':
+            self.transformer = BertModel.from_pretrained(config.base_model)
+        elif config.base_model_type == 'deberta':
+            self.transformer = DebertaV2Model.from_pretrained(config.base_model)
+        else:
+            raise ValueError("No valid base model type. " +
+                             "Expected 'bert' or 'deberta', " +
+                             f"got {config.base_model_type}")
+
+        self.text_pooler = nn.Linear(config.text_dim, config.text_dim)
+        self.text_pooler_fn = nn.GELU()
+        self.dropout = nn.Dropout(0.1)
+        self.linear = nn.Linear(config.text_dim, config.num_labels)
+
+        if config.freeze_base:
+            for param in self.transformer.parameters():
+                param.requires_grad = False
+
+    def forward(self, input_ids, attention_mask, features=None, labels=None, **kwargs):
+        seq_output = self.transformer(input_ids=input_ids,
+                                      attention_mask=attention_mask,
+                                      **kwargs)
+        hidden_state = seq_output.last_hidden_state[:, 0]
+        text_pooler_output = self.text_pooler_fn(
+            self.text_pooler(
+                hidden_state.to(self.text_pooler.weight.dtype)
+            )
+        )
+        dropout_output = self.dropout(text_pooler_output)
+        logits = self.linear(dropout_output)
+
+        loss = None
+        if labels is not None:
+            loss_fct = nn.CrossEntropyLoss()
+            loss = loss_fct(logits, labels.long())
+
+        return SequenceClassifierOutput(loss=loss,
+                                        logits=logits,
+                                        hidden_states=seq_output.hidden_states,
+                                        attentions=seq_output.attentions)
+
+
 class ClassificationModelConcatenation(PreTrainedModel):
     config_class = GeneralConfig
 

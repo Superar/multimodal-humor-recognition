@@ -11,6 +11,7 @@ import wandb
 
 from humor_recognition.dataset import HumorDataset
 from humor_recognition.models import (
+    ClassificationModelBase,
     ClassificationModelConcatenation,
     ClassificationModelFeaturesPooling,
     ClassificationModelSharedRepresentation,
@@ -46,7 +47,7 @@ models = [
     ("PORTULAN/albertina-900m-portuguese-ptpt-encoder", "deberta"),
 ]
 
-methods = ["concatenation", "pooling", "shared"]
+methods = ["base", "concatenation", "pooling", "shared"]
 
 NUM_RUNS_PER_SWEEP = 40
 SWEEP_PROJECT = "multimodal-humor-recognition"
@@ -108,7 +109,9 @@ def run_sweep_training(
         label2id=train_dataset.label2id,
     )
 
-    if method_name == "concatenation":
+    if method_name == "base":
+        method_class = ClassificationModelBase
+    elif method_name == "concatenation":
         method_class = ClassificationModelConcatenation
     elif method_name == "pooling":
         method_class = ClassificationModelFeaturesPooling
