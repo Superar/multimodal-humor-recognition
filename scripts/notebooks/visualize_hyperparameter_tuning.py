@@ -30,12 +30,13 @@ def _(pd):
         'albertina-900m-portuguese-ptpt-encoder': 'Albertina-900M-PT-PT'
     }
     _methods_formulas = {
+        'base': 'x',
         'concatenation': 'x‖v',
         'pooling': 'x‖f(v)',
         'shared': 'f(x‖f(v))'
     }
-    models_order = ['Albertina-900M-PT-BR', 'Albertina-900M-PT-PT', 'BERTimbau-base', 'BERTimbau-large']
-    methods_order = ['x‖v', 'x‖f(v)', 'f(x‖f(v))']
+    models_order = ['Albertina-900M-PT-BR', 'Albertina-900M-PT-PT', 'BERTimbau-large', 'BERTimbau-base']
+    methods_order = ['x', 'x‖v', 'x‖f(v)', 'f(x‖f(v))']
     # methods_order = ['concatenation', 'pooling', 'shared']
 
     sweeps_df = pd.read_parquet('results/sweeps/sweeps.parquet')
@@ -518,7 +519,7 @@ def _(mo):
 
 
 @app.cell
-def _(alt, methods_order, mo, summary_df):
+def _(alt, methods_order, mo, models_order, summary_df):
     _points = (
         alt.Chart(summary_df)
         .transform_filter(
@@ -570,7 +571,7 @@ def _(alt, methods_order, mo, summary_df):
     _g = (
         (_points + _best)
          .facet(
-             facet=alt.Facet('model:N', title=None),
+             facet=alt.Facet('model:N', title=None).sort(models_order),
              columns=2
          )
     )
